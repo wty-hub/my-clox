@@ -156,9 +156,9 @@ static void unary() {
 }
 
 static void parsePrecedence(Precedence precedence) {
-  // 假定previous token规定了precedence
+  // 假定 previous token 规定了 precedence
   advance();
-  // 前进一格，
+  // 前进一格，将当前 previous token 作为前缀，获取其规则
   ParseFn prefixRule = getRule(parser.previous.type)->prefix;
   if (prefixRule == NULL) {
     error("Expect expression.");
