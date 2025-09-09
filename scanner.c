@@ -177,14 +177,14 @@ static Token number() {
     while (isDigit(peek())) advance();
   }
 
-  return makeToken(identifierType());
+  return makeToken(TOKEN_NUMBER);
 }
 
 static Token identifier() {
   while (isAlpha(peek()) || isDigit(peek())) {
     advance();
   }
-  return makeToken(TOKEN_IDENTIFIER);
+  return makeToken(identifierType());
 }
 
 Token scanToken() {
@@ -195,11 +195,11 @@ Token scanToken() {
   }
 
   char c = advance();
-  if (isAlpha(c)) {
-    return identifier();
-  }
   if (isDigit(c)) {
     return number();
+  }
+  if (isAlpha(c)) {
+    return identifier();
   }
   switch (c) {
     case '(':
