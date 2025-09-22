@@ -30,7 +30,8 @@ typedef struct Obj {
 typedef struct ObjString {
   Obj obj;
   int length;
-  char chars[0];
+  char* chars;
+  uint32_t hash;
 } ObjString;
 
 ObjString* takeString(char* chats, int length);
