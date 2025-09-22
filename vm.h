@@ -6,12 +6,13 @@
 
 #define STACK_MAX 256
 
-typedef struct {
+typedef struct VM {
   Chunk* chunk;
   uint8_t* ip;
   Value* stack;
   Value* stackTop;
   uint64_t stackCapacity;
+  Obj* objects;
 } VM;
 
 typedef enum {
@@ -19,6 +20,8 @@ typedef enum {
   INTERPRET_COMPILE_ERROR,
   INTERPRET_RUNTIME_ERROR
 } InterpretResult;
+
+extern VM vm;
 
 void initVM();
 void freeVM();
