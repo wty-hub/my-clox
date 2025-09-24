@@ -12,10 +12,20 @@ HEADERS = $(wildcard *.h)
 
 # Object files
 OBJECTS = $(SOURCES:.c=.o)
+# Put object files in a separate directory
+OBJDIR := build
+
+# Override OBJECTS to live under $(OBJDIR)
+OBJECTS := $(patsubst %.c,$(OBJDIR)/%.o,$(SOURCES))
+
+# Pattern rule to produce objects under $(OBJDIR)
+# ensures the directory exists before compiling
+$(OBJDIR)/%.o: %.c $(HEADERS)
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Default target
 all: $(TARGET)
-	rm -f $(OBJECTS)
 
 # Build the main executable
 $(TARGET): $(OBJECTS)
@@ -28,7 +38,6 @@ $(TARGET): $(OBJECTS)
 # Debug build
 debug: CFLAGS = -Wall -std=c99 -O0 $(DEBUG_FLAGS)
 debug: $(TARGET)
-	rm -f $(OBJECTS)
 
 # Clean build files
 clean:

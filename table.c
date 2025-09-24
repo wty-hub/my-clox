@@ -4,6 +4,8 @@
 
 #include "table.h"
 
+#include <string.h>
+
 #include "memory.h"
 
 #define TABLE_MAX_LOAD 0.75
@@ -17,16 +19,6 @@ void initTable(Table* table) {
 void freeTable(Table* table) {
   FREE_ARRAY(Entry, table->entries, table->capacity);
   initTable(table);
-}
-
-bool tableGet(Table* table, ObjString* key, Value* value) {
-  if (table->count == 0) return false;
-
-  Entry* entry = findEntry(table->entries, table->capacity, key);
-  if (entry->key == NULL) return false;
-
-  *value = entry->value;
-  return true;
 }
 
 static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
@@ -50,6 +42,16 @@ static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
 
     index = (index + 1) % capacity;
   }
+}
+
+bool tableGet(Table* table, ObjString* key, Value* value) {
+  if (table->count == 0) return false;
+
+  Entry* entry = findEntry(table->entries, table->capacity, key);
+  if (entry->key == NULL) return false;
+
+  *value = entry->value;
+  return true;
 }
 
 static void adjustCapacity(Table* table, int capacity) {
