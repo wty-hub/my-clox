@@ -670,11 +670,12 @@ ParseRule rules[] = {
 
 static ParseRule* getRule(TokenType type) { return &rules[type]; }
 
-bool compile(const char* source, Chunk* chunk) {
+
+ObjFunction* compile(const char* source) {
   initScanner(source);
   Compiler compiler;
   initCompiler(&compiler, TYPE_SCRIPT);
-  compilingChunk = chunk;
+  // compilingChunk = chunk;
 
   parser.hadError = false;
   parser.panicMode = false;
@@ -685,6 +686,6 @@ bool compile(const char* source, Chunk* chunk) {
     declaration();
   }
 
-  endCompiler();
-  return !parser.hadError;
+  ObjFunction* function = endCompiler();
+  return parser.hadError ? NULL : function;
 }

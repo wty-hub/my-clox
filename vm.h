@@ -2,15 +2,24 @@
 #define clox_vm_h
 
 #include "chunk.h"
-#include "value.h"
 #include "table.h"
+#include "value.h"
+#include "object.h"
 
+#define FRAMES_MAX 64
 #define STACK_MAX 256
 
-typedef struct VM {
-  Chunk* chunk;
+typedef struct {
+  ObjFunction* function;
   uint8_t* ip;
-  Value* stack;
+  Value* slots;
+} CallFrame;
+
+typedef struct VM {
+  CallFrame frames[FRAMES_MAX];
+  int frameCount;
+
+  Value stack[STACK_MAX];
   Value* stackTop;
   uint64_t stackCapacity;
   Table globals;
