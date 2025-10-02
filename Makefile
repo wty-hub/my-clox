@@ -35,8 +35,13 @@ $(TARGET): $(OBJECTS)
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+
+#define DEBUG_PRINT_CODE
+#define DEBUG_TRACE_EXECUTION
+
 # Debug build
-debug: CFLAGS = -Wall -std=c99 -O0 $(DEBUG_FLAGS)
+debug: DEBUG_FLAGS = -g -DDEBUG -O0
+debug: CFLAGS = -Wall -std=c99 $(DEBUG_FLAGS)
 debug: $(TARGET)
 
 # Clean build files

@@ -43,27 +43,14 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
   return offset + 2;
 }
 
-static int constantInstructionLong(const char* name, Chunk* chunk, int offset) {
-  uint32_t constant = 0;
-  constant |= (chunk->code[offset + 1] << 16);
-  constant |= (chunk->code[offset + 2] << 8);
-  constant |= (chunk->code[offset + 3]);
-  printf("%-16s %4d '", name, constant);
-  printValue(chunk->constants.values[constant]);
-  printf("\n");
-  return offset + 4;
-}
-
 int disassembleInstruction(Chunk* chunk, int offset) {
   printf("%04d ", offset);
-  int preInstructionLine = getLine(&chunk->lineInfos, offset - 1);
-  int thisInstructionLine = getLine(&chunk->lineInfos, offset);
-
-  if (offset > 0 && preInstructionLine == thisInstructionLine) {
+  if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
     printf("   | ");
   } else {
-    printf("%4d ", thisInstructionLine);
+    printf("%4d ", chunk->lines[offset]);
   }
+
   uint8_t instruction = chunk->code[offset];
   switch (instruction) {
     case OP_PRINT:
@@ -74,6 +61,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
       return jumpInstruction("OP_JUMP_IF_FALSE", 1, chunk, offset);
     case OP_LOOP:
       return jumpInstruction("OP_LOOP", -1, chunk, offset);
+    case OP_CALL:
+      return byteInstruction("OP_CALL", chunk, offset);
     case OP_RETURN:
       return simpleInstruction("OP_RETURN", offset);
     case OP_CONSTANT:

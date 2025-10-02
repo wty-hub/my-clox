@@ -9,13 +9,16 @@
 
 #define IS_FUNCTION(value) isObjType(value, OBJ_FUNCTION)
 #define IS_STRING(value) isObjType(value, OBJ_STRING)
+#define IS_NATIVE(value) isObjType(value, OBJ_NATIVE)
 
 #define AS_FUNCTION(value) ((ObjFunction*)AS_OBJ(value))
-#define AS_STRING(value) ((ObjString*)AS_OBJ(value));
+#define AS_NATIVE(value) (((ObjNative*)AS_OBJ(value))->function)
+#define AS_STRING(value) ((ObjString*)AS_OBJ(value))
 #define AS_CSTRING(value) (((ObjString*)AS_OBJ(value))->chars)
 
 typedef enum {
   OBJ_FUNCTION,
+  OBJ_NATIVE,
   OBJ_STRING,
 } ObjType;
 
@@ -24,14 +27,20 @@ typedef struct Obj {
   struct Obj* next;
 } Obj;
 
-typedef struct {
+typedef struct ObjFunction {
   Obj obj;
   int arity;
   Chunk chunk;
   ObjString* name;
 } ObjFunction;
 
-// challenge 19.1
+typedef Value (*NativeFn)(int argCount, Value* args);
+
+typedef struct ObjNative {
+  Obj obj;
+  NativeFn function;
+} ObjNative;
+
 typedef struct ObjString {
   Obj obj;
   int length;
@@ -40,6 +49,7 @@ typedef struct ObjString {
 } ObjString;
 
 ObjFunction* newFunction();
+ObjNative* newNative(NativeFn function);
 ObjString* takeString(char* chats, int length);
 
 ObjString* copyString(const char* chars, int length);
