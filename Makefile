@@ -40,8 +40,7 @@ $(TARGET): $(OBJECTS)
 #define DEBUG_TRACE_EXECUTION
 
 # Debug build
-debug: DEBUG_FLAGS = -g -DDEBUG -O0
-debug: CFLAGS = -Wall -std=c99 $(DEBUG_FLAGS)
+debug: CFLAGS = -Wall -std=c99 -O0 $(DEBUG_FLAGS)
 debug: $(TARGET)
 
 # Clean build files
