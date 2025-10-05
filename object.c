@@ -30,6 +30,12 @@ static Obj* allocateObject(size_t size, ObjType type) {
   return object;
 }
 
+ObjClass* newClass(ObjString* name) {
+  ObjClass* klass = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
+  klass->name = name;
+  return klass;
+}
+
 ObjClosure* newClosure(ObjFunction* function) {
   ObjUpvalue** upvalues = ALLOCATE(ObjUpvalue*, function->upvalueCount);
   for (int i = 0; i < function->upvalueCount; i++) {
@@ -62,7 +68,9 @@ static ObjString* allocateString(char* chars, int length, uint32_t hash) {
   string->length = length;
   string->chars = chars;
   string->hash = hash;
+  push(OBJ_VAL(string));
   tableSet(&vm.strings, string, NIL_VAL);
+  pop();
   return string;
 }
 
