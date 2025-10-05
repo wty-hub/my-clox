@@ -37,7 +37,7 @@ typedef struct {
 #define IS_NUMBER(value) ((value).type == VAL_NUMBER)
 #define IS_OBJ(value) ((value).type == VAL_OBJ)
 
-typedef struct {
+typedef struct ValueArray {
   int capacity;
   int count;
   Value* values;
