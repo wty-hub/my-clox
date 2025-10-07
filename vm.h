@@ -25,8 +25,8 @@ typedef struct VM {
   uint64_t stackCapacity;
   Table globals;
   Table strings;
+  ObjString* initString;
   ObjUpvalue* openUpvalues;
-
   size_t bytesAllocated;
   size_t nextGC;
   Obj* objects;

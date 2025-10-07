@@ -1,3 +1,5 @@
 # CLOX 实现
 
-只是crafting interpreters中的CLOX实现，加上了自己写的注释
+只是一个 crafting interpreters 中的 clox 解释器实现
+
+正在攻克 challenge
